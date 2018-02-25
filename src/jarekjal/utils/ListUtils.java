@@ -19,7 +19,7 @@ public class ListUtils {
 
     public static List<Integer> randomIndexesOf(List<?> list, int number) {
 
-        if (number > list.size() | number < 1)
+        if (number > list.size() || number < 1)
             throw new IllegalArgumentException("Number can't be higher than list's size or less than 1");
 
         List<Integer> resultTmp = new ArrayList<>();

@@ -12,26 +12,13 @@ public class FileUtils {
 
     private static List<File> result;
 
-    private static List<File> flatFileTreeRecurently(File startDir) {
+
+    private static List<File> flatFileTreeRecurently(File startDir, Predicate<File> condition) {
 
         File[] files = startDir.listFiles();
         for (File f : files) {
             if (f.isDirectory()) {
-                flatFileTreeRecurently(f);
-            } else {
-                result.add(f);
-            }
-        }
-        return result;
-    }
-
-//testowa wersja
-    private static List<File> flatFileTreeRecurently2(File startDir, Predicate<File> condition) {
-
-        File[] files = startDir.listFiles();
-        for (File f : files) {
-            if (f.isDirectory()) {
-                flatFileTreeRecurently2(f, condition);
+                flatFileTreeRecurently(f, condition);
             } else {
                 if (condition.test(f)) {
                     result.add(f);
@@ -44,11 +31,11 @@ public class FileUtils {
 
     public static List<File> flatFileTree(File startDir, Predicate<File> condition) {
 
-        if (startDir == null | !startDir.exists() | !startDir.isDirectory())
+        if (startDir == null || !startDir.exists() || !startDir.isDirectory())
             throw new IllegalArgumentException("Starting directory must exist");
 
         result = new ArrayList<>();
-        return flatFileTreeRecurently2(startDir, condition);
+        return flatFileTreeRecurently(startDir, condition);
     }
 
     public static List<File> flatFileTree(File startDir) {
@@ -58,19 +45,6 @@ public class FileUtils {
 
     public static void main(String[] args) {
 
-        File f = new File("C:\\Users\\ejarjal\\Dropbox\\jarek\\Aranze");
-        System.out.println(flatFileTree(f));
-        System.out.println(flatFileTree(f).size());
-        f = new File("C:\\Users\\ejarjal\\Dropbox\\jarek\\FakeMp3");
-        System.out.println(flatFileTree(f));
-        System.out.println(flatFileTree(f).size());
-        f = new File("C:\\Users\\ejarjal\\Dropbox\\jarek\\Aranze");
-        List<File> l = flatFileTree(f);
-        System.out.println(l.get(0));
-        f = new File("C:\\Users\\ejarjal\\Dropbox\\jarek\\FakeMp3");
-        System.out.println(flatFileTree(f));
-        System.out.println(flatFileTree(f).size());
-        System.out.println(l.get(0));
     }
 
 }
