@@ -16,10 +16,11 @@ import java.util.Observer;
 
 public class Controller implements Observer {
 
-    @FXML
-    private Text zegar;
+    @FXML private Text zegar;
     @FXML private Label dir;
-    Model model;
+    @FXML private Text tytul;
+    private Model model;
+    private Stoper stoper;
 
 
     public Controller() {
@@ -30,33 +31,24 @@ public class Controller implements Observer {
     }
 
 
-    @FXML
-    private void mouseEntered(MouseEvent mouseEvent) {
-        System.out.println("mouseEntered");
-        zegar.setText("Entered");
-    }
-
-
-    public void mouseExited(MouseEvent mouseEvent) {
-        System.out.println("mouseExited");
-        zegar.setText("Exited");
-    }
 
     @FXML
     public void actionOpenDir(ActionEvent actionEvent) {
         DirectoryChooser dc = new DirectoryChooser();
         File choosenDir =  dc.showDialog(null);
         if (choosenDir == null || !choosenDir.isDirectory() || !choosenDir.exists() ){
-            System.out.println("Blad: wybrano zly katalog! : " + choosenDir);
+            System.out.println("Błąd: wybrano zły katalog! : " + choosenDir);
         } else {
             model.setDir(choosenDir);
             System.out.println("Wybrano: " + choosenDir);
         }
+        stoper = new Stoper(zegar);
     }
     @FXML
     public void actionKeyPressed(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.SPACE) {
             System.out.println("SPACE pressed");
+            model.spacePressed();
         }
 
     }
@@ -65,6 +57,32 @@ public class Controller implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        dir.setText("Observable: "+ o + " sent: " + arg );
+
+        Message m = (Message) arg;
+        String command  = m.command;
+        switch (command) {
+            case "dir":
+                dir.setText("Dir: " + m.params[0] + " (" + m.params[1] + ")");
+                break;
+            case "timer":
+                if ("start".equals(m.params[0])){
+                    stoper.start();
+                } else if ("stop".equals(m.params[0])){
+                    stoper.stop();
+                }
+                break;
+            case "clear":
+                zegar.setText("0:00:000");
+                tytul.setText("");
+                break;
+            case "title":
+                tytul.setText(m.params[0]);
+                break;
+            default:
+                break;
+        }
+
+
+
     }
 }

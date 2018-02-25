@@ -38,12 +38,17 @@
         </MenuBar>
         <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
             <children>
-                <Text fx:id="zegar" layoutX="253.0" layoutY="177.0" onMouseEntered="#mouseEntered" onMouseExited="#mouseExited" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER">
+                <Text fx:id="zegar" layoutX="246.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0:00:000" textAlignment="CENTER">
                     <font>
                         <Font size="36.0" />
                     </font>
                 </Text>
             <Label fx:id="dir" layoutX="14.0" layoutY="344.0" />
+            <Text fx:id="tytul" layoutX="23.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="595.0">
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </Text>
             </children>
         </AnchorPane>
     </children>
