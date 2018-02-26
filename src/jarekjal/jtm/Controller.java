@@ -1,12 +1,10 @@
 package jarekjal.jtm;
 
-import javafx.beans.InvalidationListener;
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import java.io.File;
@@ -20,7 +18,6 @@ public class Controller implements Observer {
     @FXML private Label dir;
     @FXML private Text tytul;
     private Model model;
-    private Stoper stoper;
 
 
     public Controller() {
@@ -33,7 +30,7 @@ public class Controller implements Observer {
 
 
     @FXML
-    public void actionOpenDir(ActionEvent actionEvent) {
+    public void actionOpenDir() {
         DirectoryChooser dc = new DirectoryChooser();
         File choosenDir =  dc.showDialog(null);
         if (choosenDir == null || !choosenDir.isDirectory() || !choosenDir.exists() ){
@@ -42,7 +39,6 @@ public class Controller implements Observer {
             model.setDir(choosenDir);
             System.out.println("Wybrano: " + choosenDir);
         }
-        stoper = new Stoper(zegar);
     }
     @FXML
     public void actionKeyPressed(KeyEvent keyEvent) {
@@ -65,11 +61,7 @@ public class Controller implements Observer {
                 dir.setText("Dir: " + m.params[0] + " (" + m.params[1] + ")");
                 break;
             case "timer":
-                if ("start".equals(m.params[0])){
-                    stoper.start();
-                } else if ("stop".equals(m.params[0])){
-                    stoper.stop();
-                }
+                zegar.setText(m.params[0]);
                 break;
             case "clear":
                 zegar.setText("0:00:000");

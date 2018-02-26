@@ -2,8 +2,11 @@ package jarekjal.jtm;
 
 import jarekjal.utils.FileUtils;
 import jarekjal.utils.ListUtils;
-import javafx.scene.media.AudioClip;
-
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 import java.io.File;
 import java.util.List;
 import java.util.Observable;
@@ -22,13 +25,14 @@ public class Model extends Observable {
     private static int randomFilesCount = DEFAULT_COUNT;
     private static int ptr = 0;
     private static Predicate<File> isMP3 = (File f) -> f.toString().toLowerCase().endsWith(".mp3");
-    AudioClip clip = null;
+    private static MediaPlayer player = null;
+    Timeline tl = null;
 
     public void setDir(File dir) {
         Model.dir = dir;
         Message message;
-        if (clip != null) {
-            clip.stop();
+        if (player != null) {
+            player.stop();
             message = new Message("timer", new String[] {"stop"});
             this.setChanged();
             this.notifyObservers(message);
@@ -68,20 +72,19 @@ public class Model extends Observable {
                 message = new Message("clear", null);
                 this.setChanged();
                 this.notifyObservers(message);
-                clip = new AudioClip(randomFiles.get(ptr).toURI().toString());
-                clip.play();
+                Media media = new Media(randomFiles.get(ptr).toURI().toString());
+                player = new MediaPlayer(media);
+                player.play();
                 //start timera
-                message = new Message("timer", new String[] {"start"});
-                this.setChanged();
-                this.notifyObservers(message);
+                tl = new Timeline(new KeyFrame(Duration.millis(10), ae -> updateStoper()));
+                tl.setCycleCount(Timeline.INDEFINITE);
+                tl.play();
                 state = State.S3;
                 break;
             case S3: // zatrzymanie pliku, timer zatrzymany, tytulu brak
-                clip.stop();
+                player.stop();
                 // stop timera
-                message = new Message("timer", new String[] {"stop"});
-                this.setChanged();
-                this.notifyObservers(message);
+                tl.stop();
                 state = State.S4;
                 break;
             case S4: // pokazanie tytulu, sprawdzenie czy ostatni, zwiekszenie pointera, przejscie do S1/S2
@@ -100,5 +103,12 @@ public class Model extends Observable {
                 break;
         }
     }
+
+    private void updateStoper() {
+        Message message = new Message("timer", new String[] {""+player.getCurrentTime().toMillis()});
+        this.setChanged();
+        this.notifyObservers(message);
+    }
+
 
 }
