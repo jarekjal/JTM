@@ -17,37 +17,36 @@ import java.util.function.Predicate;
  */
 public class Model extends Observable {
 
-    private enum State {S0, S1, S2, S3, S4}
+    private enum State {S0, S1, S2, S3, S4, S5}
     private static State state = State.S0;
     private static File dir = null;
     private static List<File> randomFiles = null;
-    private static final int DEFAULT_COUNT = 7;
+    private static final int DEFAULT_COUNT = 20;
     private static int randomFilesCount = DEFAULT_COUNT;
     private static int ptr = 0;
     private static Predicate<File> isMP3 = (File f) -> f.toString().toLowerCase().endsWith(".mp3");
     private static MediaPlayer player = null;
-    Timeline tl = null;
+    private static Timeline tl = null;
+
 
     public void setDir(File dir) {
         Model.dir = dir;
         Message message;
         if (player != null) {
             player.stop();
-            message = new Message("timer", new String[] {"stop"});
-            this.setChanged();
-            this.notifyObservers(message);
+            tl.stop();
         }
-        List<File> fileList = FileUtils.flatFileTree(this.dir, isMP3);
+        List<File> fileList = FileUtils.flatFileTree(Model.dir, isMP3);
         System.out.println("Odfiltrowano: " + fileList.size());
 
         if (fileList.isEmpty()) {
             message = new Message("dir", new String[] {"Directory not set!" , ""});
-            this.state = State.S0;
+            state = State.S0;
         } else {
             randomFilesCount = fileList.size()> DEFAULT_COUNT ? DEFAULT_COUNT : fileList.size();
-            this.randomFiles = ListUtils.randomSublistOf(fileList, randomFilesCount);
-            message = new Message("dir", new String[] {this.dir.toString(), ""+fileList.size()});
-            this.state = State.S1;
+            randomFiles = ListUtils.randomSublistOf(fileList, randomFilesCount);
+            message = new Message("dir", new String[] {Model.dir.toString(), ""+fileList.size()});
+            state = State.S1;
         }
         this.setChanged();
         this.notifyObservers(message);
@@ -72,6 +71,9 @@ public class Model extends Observable {
                 message = new Message("clear", null);
                 this.setChanged();
                 this.notifyObservers(message);
+                message = new Message("counter", new String[]{""+(ptr+1)+"/"+randomFilesCount});
+                this.setChanged();
+                this.notifyObservers(message);
                 Media media = new Media(randomFiles.get(ptr).toURI().toString());
                 player = new MediaPlayer(media);
                 player.play();
@@ -82,14 +84,14 @@ public class Model extends Observable {
                 state = State.S3;
                 break;
             case S3: // zatrzymanie pliku, timer zatrzymany, tytulu brak
-                player.stop();
-                // stop timera
-                tl.stop();
+                player.pause();
                 state = State.S4;
                 break;
-            case S4: // pokazanie tytulu, sprawdzenie czy ostatni, zwiekszenie pointera, przejscie do S1/S2
+            case S4: // zastopowanie pliku, pokazanie tytulu, sprawdzenie czy ostatni, zwiekszenie pointera, przejscie do S1/S2
                 // pokazanie tytulu
-                message = new Message("title", new String[] {randomFiles.get(ptr).getName().toString()});
+                player.stop();
+                tl.stop();
+                message = new Message("title", new String[] {randomFiles.get(ptr).getName()});
                 this.setChanged();
                 this.notifyObservers(message);
                 ptr++;
@@ -104,7 +106,20 @@ public class Model extends Observable {
         }
     }
 
+    public void enterPressed() {
+        switch (state){
+            case S4:
+                state = State.S5; // czy to potrzebne?
+                player.play();
+                state = State.S3;
+                break;
+        default:
+                break;
+        }
+    }
+
     private void updateStoper() {
+
         Message message = new Message("timer", new String[] {""+player.getCurrentTime().toMillis()});
         this.setChanged();
         this.notifyObservers(message);

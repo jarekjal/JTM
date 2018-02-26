@@ -17,16 +17,13 @@ public class Controller implements Observer {
     @FXML private Text zegar;
     @FXML private Label dir;
     @FXML private Text tytul;
+    @FXML private Text counter;
     private Model model;
 
-
     public Controller() {
-
         model = new Model();
         model.addObserver(this);
-
     }
-
 
 
     @FXML
@@ -40,15 +37,19 @@ public class Controller implements Observer {
             System.out.println("Wybrano: " + choosenDir);
         }
     }
+
+
     @FXML
     public void actionKeyPressed(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.SPACE) {
             System.out.println("SPACE pressed");
             model.spacePressed();
         }
-
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            System.out.println("ENTER pressed");
+            model.enterPressed();
+        }
     }
-
 
 
     @Override
@@ -70,11 +71,12 @@ public class Controller implements Observer {
             case "title":
                 tytul.setText(m.params[0]);
                 break;
+            case "counter":
+                counter.setText(m.params[0]);
+                break;
             default:
                 break;
         }
-
-
-
     }
+
 }
