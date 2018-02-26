@@ -38,9 +38,9 @@
         </MenuBar>
         <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
             <children>
-                <Text fx:id="zegar" layoutX="246.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0:00:000" textAlignment="CENTER">
+                <Text fx:id="zegar" layoutX="223.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0:00:000" textAlignment="CENTER">
                     <font>
-                        <Font size="36.0" />
+                        <Font size="53.0" />
                     </font>
                 </Text>
             <Label fx:id="dir" layoutX="14.0" layoutY="344.0" />

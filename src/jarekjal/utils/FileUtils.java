@@ -16,12 +16,14 @@ public class FileUtils {
     private static List<File> flatFileTreeRecurently(File startDir, Predicate<File> condition) {
 
         File[] files = startDir.listFiles();
-        for (File f : files) {
-            if (f.isDirectory()) {
-                flatFileTreeRecurently(f, condition);
-            } else {
-                if (condition.test(f)) {
-                    result.add(f);
+        if (files != null){
+            for (File f : files) {
+                if (f.isDirectory()) {
+                    flatFileTreeRecurently(f, condition);
+                } else {
+                    if (condition.test(f)) {
+                        result.add(f);
+                    }
                 }
             }
         }

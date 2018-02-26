@@ -1,12 +1,10 @@
 package jarekjal.jtm;
 
-import javafx.beans.InvalidationListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import java.io.File;
@@ -69,6 +67,7 @@ public class Controller implements Observer {
                     stoper.start();
                 } else if ("stop".equals(m.params[0])){
                     stoper.stop();
+                    model.setTimeDiff(stoper.getTimeDiff());
                 }
                 break;
             case "clear":

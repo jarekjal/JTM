@@ -19,6 +19,10 @@ public class Stoper {
         text = t;
     }
 
+    public java.time.Duration getTimeDiff() {
+        return timeDiff;
+    }
+
     public void start() {
 
         startTime = LocalTime.now();

@@ -5,6 +5,7 @@ import jarekjal.utils.ListUtils;
 import javafx.scene.media.AudioClip;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.List;
 import java.util.Observable;
 import java.util.function.Predicate;
@@ -18,11 +19,12 @@ public class Model extends Observable {
     private static State state = State.S0;
     private static File dir = null;
     private static List<File> randomFiles = null;
-    private static final int DEFAULT_COUNT = 7;
+    private static final int DEFAULT_COUNT = 20;
     private static int randomFilesCount = DEFAULT_COUNT;
     private static int ptr = 0;
     private static Predicate<File> isMP3 = (File f) -> f.toString().toLowerCase().endsWith(".mp3");
-    AudioClip clip = null;
+    private static AudioClip clip = null;
+    private static Duration timeDiff;
 
     public void setDir(File dir) {
         Model.dir = dir;
@@ -96,9 +98,11 @@ public class Model extends Observable {
                     state = State.S2;
                 }
                 break;
-            default:
-                break;
         }
     }
 
+
+    public void setTimeDiff(Duration timeDiff) {
+        this.timeDiff = timeDiff;
+    }
 }
