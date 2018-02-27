@@ -18,13 +18,8 @@
                     <items>
 
                         <MenuItem mnemonicParsing="false" onAction="#actionOpenDir" text="Open…" />
-                        <Menu mnemonicParsing="false" text="Open Recent" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Close" />
-                        <MenuItem mnemonicParsing="false" text="Save" />
-                        <MenuItem mnemonicParsing="false" text="Save As…" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Preferences…" />
+                        <MenuItem fx:id="settings" mnemonicParsing="false" onAction="#actionSettings" text="Settings..." />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" text="Quit" />
                     </items>

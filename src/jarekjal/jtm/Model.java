@@ -17,12 +17,16 @@ import java.util.function.Predicate;
  */
 public class Model extends Observable {
 
+    public void setDefaultCount(int trackNumber) {
+        defaultCount = trackNumber;
+    }
+
     private enum State {S0, S1, S2, S3, S4, S5}
     private static State state = State.S0;
     private static File dir = null;
     private static List<File> randomFiles = null;
-    private static final int DEFAULT_COUNT = 20;
-    private static int randomFilesCount = DEFAULT_COUNT;
+    private static int defaultCount = 20;
+    private static int randomFilesCount = defaultCount;
     private static int ptr = 0;
     private static Predicate<File> isMP3 = (File f) -> f.toString().toLowerCase().endsWith(".mp3");
     private static MediaPlayer player = null;
@@ -43,7 +47,7 @@ public class Model extends Observable {
             message = new Message("dir", new String[] {"Directory not set!" , ""});
             state = State.S0;
         } else {
-            randomFilesCount = fileList.size()> DEFAULT_COUNT ? DEFAULT_COUNT : fileList.size();
+            randomFilesCount = fileList.size()> defaultCount ? defaultCount : fileList.size();
             randomFiles = ListUtils.randomSublistOf(fileList, randomFilesCount);
             message = new Message("dir", new String[] {Model.dir.toString(), ""+fileList.size()});
             state = State.S1;
@@ -76,6 +80,7 @@ public class Model extends Observable {
                 this.notifyObservers(message);
                 Media media = new Media(randomFiles.get(ptr).toURI().toString());
                 player = new MediaPlayer(media);
+                player.setOnEndOfMedia(() -> state = State.S4);
                 player.play();
                 //start timera
                 tl = new Timeline(new KeyFrame(Duration.millis(10), ae -> updateStoper()));
