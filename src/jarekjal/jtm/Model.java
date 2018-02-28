@@ -19,6 +19,7 @@ public class Model extends Observable {
 
     public void setDefaultCount(int trackNumber) {
         defaultCount = trackNumber;
+        setDir(dir);
     }
 
     private enum State {S0, S1, S2, S3, S4, S5}
