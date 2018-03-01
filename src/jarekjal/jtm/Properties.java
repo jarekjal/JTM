@@ -74,19 +74,30 @@ public class Properties {
 
     @FXML
     public void actionOKpresed(ActionEvent actionEvent) {
+        int num = 0;
         try {
-            number = Integer.parseInt(textField.getText());
+            num = Integer.parseInt(textField.getText());
         }
         catch (NumberFormatException ex) {
             directory = null;
+            fileList = null;
+            number = 0;
+            textField.setDisable(true);
             correct = false;
-
+        }
+        if (directory != null && num>minNumber && num<=maxNumber) {
+            number = num;
+            correct = true;
         }
         if (correct) {
                 model.setDir(fileList);
         }
         ((Stage)(((Node) actionEvent.getSource()).getScene().getWindow())).close();
 
+    }
+
+    @FXML void actionTextField(ActionEvent actionEvent){ //w celu obslugi potwierdzenia ENTERem wpisanej liczby utworow
+        actionOKpresed(actionEvent);
     }
 
     @FXML
@@ -110,6 +121,7 @@ public class Properties {
                 fileList = null;
                 number = 0;
                 correct = false;
+                textField.setDisable(true);
             }
             update();
 
