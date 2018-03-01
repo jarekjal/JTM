@@ -17,40 +17,29 @@ import java.util.function.Predicate;
  */
 public class Model extends Observable {
 
-    public void setDefaultCount(int trackNumber) {
-        defaultCount = trackNumber;
-        setDir(dir);
-    }
-
     private enum State {S0, S1, S2, S3, S4, S5}
     private static State state = State.S0;
-    private static File dir = null;
     private static List<File> randomFiles = null;
-    private static int defaultCount = 20;
-    private static int randomFilesCount = defaultCount;
+    private static int randomFilesCount;
     private static int ptr = 0;
-    private static Predicate<File> isMP3 = (File f) -> f.toString().toLowerCase().endsWith(".mp3");
     private static MediaPlayer player = null;
     private static Timeline tl = null;
 
 
-    public void setDir(File dir) {
-        Model.dir = dir;
+    public void setDir(List<File> fileList) {
+
         Message message;
         if (player != null) {
             player.stop();
             tl.stop();
         }
-        List<File> fileList = FileUtils.flatFileTree(Model.dir, isMP3);
-        System.out.println("Odfiltrowano: " + fileList.size());
-
         if (fileList.isEmpty()) {
             message = new Message("dir", new String[] {"Directory not set!" , ""});
             state = State.S0;
         } else {
-            randomFilesCount = fileList.size()> defaultCount ? defaultCount : fileList.size();
+            randomFilesCount = SettingsModel.get().getNumber();
             randomFiles = ListUtils.randomSublistOf(fileList, randomFilesCount);
-            message = new Message("dir", new String[] {Model.dir.toString(), ""+fileList.size()});
+            message = new Message("dir", new String[] {SettingsModel.get().getDirectory().toString(), ""+fileList.size()});
             state = State.S1;
         }
         this.setChanged();
@@ -126,7 +115,7 @@ public class Model extends Observable {
 
     private void updateStoper() {
 
-        Message message = new Message("timer", new String[] {""+player.getCurrentTime().toMillis()});
+        Message message = new Message("timer", new Object[] {player.getCurrentTime()});
         this.setChanged();
         this.notifyObservers(message);
     }

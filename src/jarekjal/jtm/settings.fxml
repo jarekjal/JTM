@@ -5,10 +5,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="177.0" prefWidth="386.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" >
+<AnchorPane prefHeight="177.0" prefWidth="386.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="24.0" layoutY="72.0" prefHeight="17.0" prefWidth="161.0" text="Liczba losowanych piosenek:" />
-      <TextField fx:id="textField" layoutX="197.0" layoutY="68.0" prefHeight="25.0" prefWidth="152.0" />
-      <Button fx:id="buttonOK" layoutX="296.0" layoutY="117.0" mnemonicParsing="false" onAction="#actionOKpresed" prefHeight="25.0" prefWidth="53.0" text="OK" textAlignment="CENTER" />
+      <Label layoutX="24.0" layoutY="98.0" prefHeight="17.0" prefWidth="161.0" text="Liczba losowanych piosenek:" />
+      <TextField fx:id="textField" layoutX="238.0" layoutY="94.0" prefHeight="25.0" prefWidth="125.0" />
+      <Button fx:id="buttonOK" layoutX="311.0" layoutY="138.0" mnemonicParsing="false" onAction="#actionOKpresed" prefHeight="25.0" prefWidth="53.0" text="OK" textAlignment="CENTER" />
+      <Label fx:id="dirLabel" layoutX="24.0" layoutY="49.0" text="Katalog:" />
+      <Button layoutX="293.0" layoutY="45.0" mnemonicParsing="false" onAction="#actionBrowse" text="Przeglądaj" />
    </children>
 </AnchorPane>

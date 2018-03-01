@@ -2,9 +2,9 @@ package jarekjal.jtm;
 
 public class Message {
     public String command;
-    public String[] params;
+    public Object[] params;
 
-    public Message(String com, String[] par){
+    public Message(String com, Object[] par){
         command = com;
         params = par;
 
