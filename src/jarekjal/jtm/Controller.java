@@ -75,21 +75,9 @@ public class Controller implements Observer {
     }
 
     public void actionSettings(ActionEvent actionEvent) {
-        Stage settings = new Stage();
-        settings.setTitle("Settings...");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("settings.fxml"));
-            Settings settingsController = new Settings(model);
-            loader.setController(settingsController);
-            Scene scene = new Scene(loader.load());
-            settings.setScene(scene);
-            settingsController.update();
+        Properties.getInstance().setModel(model);
+        Properties.getInstance().createProperiesWindow();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        settings.show();
     }
 
 

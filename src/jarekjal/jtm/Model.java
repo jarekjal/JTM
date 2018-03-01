@@ -37,9 +37,9 @@ public class Model extends Observable {
             message = new Message("dir", new String[] {"Directory not set!" , ""});
             state = State.S0;
         } else {
-            randomFilesCount = SettingsModel.get().getNumber();
+            randomFilesCount = Properties.getInstance().getNumber();
             randomFiles = ListUtils.randomSublistOf(fileList, randomFilesCount);
-            message = new Message("dir", new String[] {SettingsModel.get().getDirectory().toString(), ""+fileList.size()});
+            message = new Message("dir", new String[] {Properties.getInstance().getDirectory().toString(), ""+fileList.size()});
             state = State.S1;
         }
         this.setChanged();
