@@ -3,16 +3,12 @@ package jarekjal.jtm;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import java.io.IOException;
+import java.time.Duration;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -55,9 +51,7 @@ public class Controller implements Observer {
                 dir.setText("Dir: " + m.params[0] + " (" + m.params[1] + ")");
                 break;
             case "timer":
-                Duration time = (Duration)m.params[0];
-                String timeFormatted = String.format("%.2f", time.toSeconds());
-                zegar.setText(timeFormatted);
+                zegar.setText(""+m.params[0]);
                 break;
             case "clear":
                 zegar.setText("0:00:000");

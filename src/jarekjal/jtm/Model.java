@@ -23,6 +23,7 @@ public class Model extends Observable {
     private static int randomFilesCount;
     private static int ptr = 0;
     private static MediaPlayer player = null;
+    private static Stoper stoper = null;
     private static Timeline tl = null;
 
 
@@ -32,6 +33,7 @@ public class Model extends Observable {
         if (player != null) {
             player.stop();
             tl.stop();
+            stoper.stop();
         }
         if (fileList.isEmpty()) {
             message = new Message("dir", new String[] {"Directory not set!" , ""});
@@ -72,6 +74,8 @@ public class Model extends Observable {
                 player = new MediaPlayer(media);
                 player.setOnEndOfMedia(() -> state = State.S4);
                 player.play();
+                stoper = new Stoper();
+                stoper.start();
                 //start timera
                 tl = new Timeline(new KeyFrame(Duration.millis(10), ae -> updateStoper()));
                 tl.setCycleCount(Timeline.INDEFINITE);
@@ -80,11 +84,13 @@ public class Model extends Observable {
                 break;
             case S3: // zatrzymanie pliku, timer zatrzymany, tytulu brak
                 player.pause();
+                stoper.pause();
                 state = State.S4;
                 break;
             case S4: // zastopowanie pliku, pokazanie tytulu, sprawdzenie czy ostatni, zwiekszenie pointera, przejscie do S1/S2
                 // pokazanie tytulu
                 player.stop();
+                stoper.stop();
                 tl.stop();
                 message = new Message("title", new String[] {randomFiles.get(ptr).getName()});
                 this.setChanged();
@@ -106,6 +112,7 @@ public class Model extends Observable {
             case S4:
                 state = State.S5; // czy to potrzebne?
                 player.play();
+                stoper.start();
                 state = State.S3;
                 break;
         default:
@@ -115,7 +122,7 @@ public class Model extends Observable {
 
     private void updateStoper() {
 
-        Message message = new Message("timer", new Object[] {player.getCurrentTime()});
+        Message message = new Message("timer", new Object[] {stoper.getDurString()});
         this.setChanged();
         this.notifyObservers(message);
     }

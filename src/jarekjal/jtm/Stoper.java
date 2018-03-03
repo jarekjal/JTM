@@ -10,44 +10,42 @@ import javafx.util.Duration;
 public class Stoper {
 
     private LocalTime startTime;
-    private LocalTime currentTime;
     private java.time.Duration timeDiff;
-    private Text text;
+    private java.time.Duration cumulativeDiff = java.time.Duration.ZERO;
     private Timeline timeline;
 
-    public Stoper(Text t) {
-        text = t;
+    public Stoper(){
+        timeline = new Timeline(new KeyFrame(Duration.millis(1), ae -> updateStoper())); // dokladnosc pomiaru
+        timeline.setCycleCount(Timeline.INDEFINITE);
     }
 
-    public java.time.Duration getTimeDiff() {
-        return timeDiff;
-    }
 
     public void start() {
-
         startTime = LocalTime.now();
-        timeline = new Timeline(new KeyFrame(Duration.millis(1), ae -> updateStoper())); // dokladnosc
-        // pomiaru
-        timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
 
-    public java.time.Duration stop() {
-        currentTime = LocalTime.now();
+    public void stop() {
         timeline.stop();
-        return timeDiff;
-
     }
+
+
+    public void pause() {
+        timeline.pause();
+        cumulativeDiff = timeDiff.plus(cumulativeDiff);
+        timeDiff = java.time.Duration.ZERO;
+    }
+
 
     private void updateStoper() {
-        currentTime = LocalTime.now();
-        timeDiff = java.time.Duration.between(startTime, currentTime);
-        text.setText(generujNapis());
+        timeDiff = java.time.Duration.between(startTime, LocalTime.now());
     }
 
-    private String generujNapis() {
+    public String getDurString(){
+
+        java.time.Duration timeToShow = cumulativeDiff.plus(timeDiff);
         String mils = "";
-        int milsInt = timeDiff.getNano() / 1000000;
+        int milsInt = timeToShow.getNano() / 1_000_000;
         mils = "" + milsInt;
         if (milsInt < 100) {
             mils = "0" + mils;
@@ -56,7 +54,7 @@ public class Stoper {
             mils = "0" + mils;
         }
 
-        long secInt = timeDiff.getSeconds() % 60;
+        long secInt = timeToShow.getSeconds() % 60;
         String seconds = "";
         if (secInt < 10) {
             seconds = "0" + secInt;
@@ -64,10 +62,8 @@ public class Stoper {
             seconds += secInt;
         }
 
-        String minutes = "" + timeDiff.toMinutes();
+        String minutes = "" + timeToShow.toMinutes();
 
-        String napis = "" + minutes + ":" + seconds + "." + mils;
-        return napis;
+        return "" + minutes + ":" + seconds + "." + mils;
     }
-
 }
