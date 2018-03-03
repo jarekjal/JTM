@@ -7,8 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
-
-import java.time.Duration;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -68,7 +66,7 @@ public class Controller implements Observer {
         }
     }
 
-    public void actionSettings(ActionEvent actionEvent) {
+    public void actionSettings(ActionEvent actionEvent) { //uzyc do pobrania parenta dla nowego okna???
         Properties.getInstance().setModel(model);
         Properties.getInstance().createProperiesWindow();
 

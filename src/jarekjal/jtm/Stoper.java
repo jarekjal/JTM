@@ -4,7 +4,6 @@ import java.time.LocalTime;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class Stoper {
@@ -44,7 +43,7 @@ public class Stoper {
     public String getDurString(){
 
         java.time.Duration timeToShow = cumulativeDiff.plus(timeDiff);
-        String mils = "";
+        String mils;
         int milsInt = timeToShow.getNano() / 1_000_000;
         mils = "" + milsInt;
         if (milsInt < 100) {

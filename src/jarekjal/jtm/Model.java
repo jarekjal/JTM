@@ -1,6 +1,5 @@
 package jarekjal.jtm;
 
-import jarekjal.utils.FileUtils;
 import jarekjal.utils.ListUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -10,7 +9,6 @@ import javafx.util.Duration;
 import java.io.File;
 import java.util.List;
 import java.util.Observable;
-import java.util.function.Predicate;
 
 /**
  * Created by ejarjal on 2018-02-22.
@@ -25,6 +23,7 @@ public class Model extends Observable {
     private static MediaPlayer player = null;
     private static Stoper stoper = null;
     private static Timeline tl = null;
+    private static boolean EOM = false;
 
 
     public void setDir(List<File> fileList) {
@@ -46,7 +45,6 @@ public class Model extends Observable {
         }
         this.setChanged();
         this.notifyObservers(message);
-
     }
 
 
@@ -72,7 +70,12 @@ public class Model extends Observable {
                 this.notifyObservers(message);
                 Media media = new Media(randomFiles.get(ptr).toURI().toString());
                 player = new MediaPlayer(media);
-                player.setOnEndOfMedia(() -> state = State.S4);
+                player.setOnEndOfMedia(() -> {
+                    state = State.S4;
+                    stoper.stop();
+                    EOM = true;
+                });
+                EOM = false;
                 player.play();
                 stoper = new Stoper();
                 stoper.start();
@@ -110,10 +113,11 @@ public class Model extends Observable {
     public void enterPressed() {
         switch (state){
             case S4:
-                state = State.S5; // czy to potrzebne?
-                player.play();
-                stoper.start();
-                state = State.S3;
+                if (!EOM) {
+                    player.play();
+                    stoper.start();
+                    state = State.S3;
+                }
                 break;
         default:
                 break;
@@ -121,11 +125,9 @@ public class Model extends Observable {
     }
 
     private void updateStoper() {
-
         Message message = new Message("timer", new Object[] {stoper.getDurString()});
         this.setChanged();
         this.notifyObservers(message);
     }
-
 
 }
