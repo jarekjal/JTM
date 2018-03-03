@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" >
+   <children>
+      <Label layoutX="10.0" layoutY="14.0" text="Wyniki:" />
+      <TableView fx:id="lista" layoutX="10.0" layoutY="31.0" prefHeight="363.0" prefWidth="581.0">
+        <columns>
+          <TableColumn prefWidth="500.0" text="Utwór" />
+          <TableColumn prefWidth="75.0" text="Czas" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

@@ -42,9 +42,13 @@ public class Stoper {
 
     public String getDurString(){
 
-        java.time.Duration timeToShow = cumulativeDiff.plus(timeDiff);
+        return formatDuration(cumulativeDiff.plus(timeDiff));
+
+    }
+
+    public static String formatDuration(java.time.Duration d){
         String mils;
-        int milsInt = timeToShow.getNano() / 1_000_000;
+        int milsInt = d.getNano() / 1_000_000;
         mils = "" + milsInt;
         if (milsInt < 100) {
             mils = "0" + mils;
@@ -53,7 +57,7 @@ public class Stoper {
             mils = "0" + mils;
         }
 
-        long secInt = timeToShow.getSeconds() % 60;
+        long secInt = d.getSeconds() % 60;
         String seconds = "";
         if (secInt < 10) {
             seconds = "0" + secInt;
@@ -61,8 +65,12 @@ public class Stoper {
             seconds += secInt;
         }
 
-        String minutes = "" + timeToShow.toMinutes();
+        String minutes = "" + d.toMinutes();
 
         return "" + minutes + ":" + seconds + "." + mils;
+    }
+
+    public java.time.Duration getDuration() {
+        return cumulativeDiff.plus(timeDiff);
     }
 }

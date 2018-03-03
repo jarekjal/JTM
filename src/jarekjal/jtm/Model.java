@@ -7,7 +7,9 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 
 /**
@@ -15,7 +17,7 @@ import java.util.Observable;
  */
 public class Model extends Observable {
 
-    private enum State {S0, S1, S2, S3, S4, S5}
+    private enum State {S0, S1, S2, S3, S4}
     private static State state = State.S0;
     private static List<File> randomFiles = null;
     private static int randomFilesCount;
@@ -24,6 +26,7 @@ public class Model extends Observable {
     private static Stoper stoper = null;
     private static Timeline tl = null;
     private static boolean EOM = false;
+    private static Map<File, java.time.Duration> fileDurationMap = new HashMap<>();
 
 
     public void setDir(List<File> fileList) {
@@ -54,6 +57,9 @@ public class Model extends Observable {
             case S0: // po wlaczeniu, niewybrany katalog
                 break;
             case S1: // katalog wybrany, stworzona lista wylosowanych plikow, ustawiony pointer na pierwszym utworze
+                if (!fileDurationMap.isEmpty()) {
+                    showList();
+                }
                 ptr = 0;
                 //wyzerowanie timera
                 message = new Message("clear", null);
@@ -95,6 +101,9 @@ public class Model extends Observable {
                 player.stop();
                 stoper.stop();
                 tl.stop();
+                java.time.Duration duration = stoper.getDuration();
+                System.out.println("Duration to save: " + duration);
+                fileDurationMap.put(randomFiles.get(ptr), duration);
                 message = new Message("title", new String[] {randomFiles.get(ptr).getName()});
                 this.setChanged();
                 this.notifyObservers(message);
@@ -108,6 +117,12 @@ public class Model extends Observable {
             default:
                 break;
         }
+    }
+
+    private void showList() {
+        Message message = new Message("list", new Object[] {fileDurationMap});
+        this.setChanged();
+        this.notifyObservers(message);
     }
 
     public void enterPressed() {

@@ -68,6 +68,8 @@ public class Properties {
         properties.setTitle("Settings...");
         if (directory == null){
             textField.setDisable(true);
+        } else {
+            update();
         }
         properties.show();
     }
