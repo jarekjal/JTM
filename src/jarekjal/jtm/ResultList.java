@@ -8,6 +8,7 @@ import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -27,8 +28,10 @@ public class ResultList {
     private Map<File, Duration> map = null;
     private List<Utwor> lista = null;
     private ObservableList<Utwor> data = null;
-    @FXML TableColumn colName;
-    @FXML TableColumn colTime;
+    @FXML private TableColumn colName;
+    @FXML private TableColumn colTime;
+    @FXML private Label avgTime;
+    private Duration avg;
 
     public static ResultList getInstance() {
         return instance;
@@ -40,10 +43,15 @@ public class ResultList {
     public void setMap(Map<File,Duration> map) {
         this.map = map;
         lista = new ArrayList<>();
+        Duration cumulative = Duration.ZERO;
         for (File f : map.keySet()){
             Utwor u = new Utwor(f.getName().toString(), Stoper.formatDuration(map.get(f)));
+            cumulative = cumulative.plus(map.get(f));
             lista.add(u);
         }
+        System.out.println("map size: "+map.size());
+        avg = cumulative.dividedBy(map.size());
+
         data = FXCollections.observableList(lista);
 
 
@@ -64,7 +72,7 @@ public class ResultList {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        properties.setTitle("Results");
+        properties.setTitle("Wyniki: ");
 
         colName.setCellValueFactory(
                 new PropertyValueFactory<Utwor, String>("name"));
@@ -75,7 +83,7 @@ public class ResultList {
                 new PropertyValueFactory<Utwor, String>("time"));
 
         tabela.setItems(data);
-        //tabela.getColumns().addAll(colName, colTime);
+        avgTime.setText("Średni czas: " + Stoper.formatDuration(avg));
 
 
         properties.show();

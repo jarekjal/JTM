@@ -15,7 +15,7 @@ public class Main extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
-        primaryStage.setTitle("JTM");
+        primaryStage.setTitle("Jaka to melodia?");
 
         primaryStage.show();
         scene.getRoot().requestFocus(); //key event needs focus

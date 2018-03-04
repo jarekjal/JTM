@@ -4,11 +4,15 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="10.0" layoutY="14.0" text="Wyniki:" />
-      <TableView fx:id="tabela" layoutX="10.0" layoutY="31.0" prefHeight="363.0" prefWidth="581.0">
+      <Label fx:id="avgTime" layoutX="450.0" layoutY="12.0" text="Średni czas: ">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <TableView fx:id="tabela" layoutY="36.0" prefHeight="364.0" prefWidth="600.0">
         <columns>
           <TableColumn fx:id="colName" prefWidth="500.0" text="Utwór" />
           <TableColumn fx:id="colTime" prefWidth="75.0" text="Czas" />

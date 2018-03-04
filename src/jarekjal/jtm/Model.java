@@ -32,6 +32,7 @@ public class Model extends Observable {
     public void setDir(List<File> fileList) {
 
         Message message;
+        fileDurationMap.clear();
         if (player != null) {
             player.stop();
             tl.stop();
